@@ -34,8 +34,14 @@
     });
 
     function seek(seconds) {
-      console.log(player.currentTime());
+      console.log("player.currentTime() = " + player.currentTime());
       player.currentTime(player.currentTime() + seconds);
+    }
+
+    function seekPercent(percent) {
+      console.log("player.duration() = " + player.duration());
+      console.log("player.duration() * percent / 100 = " + player.duration() * percent / 100);
+      player.currentTime(player.duration() * percent / 100);
     }
 
     function toggleFullScreen() {
@@ -99,25 +105,45 @@
     }
 
     document.addEventListener("keydown", (e) => {
-      // if (e.keyCode == 37) {       //left arrow
-      if (e.key == LeftArrow) {       //left arrow
+      console.log("e.key = " + e.key);
+
+      // Seek to time in video
+      if (e.key == ",") {
+        seek(-1);
+      } else if (e.key == ".") {
+        seek(1);
+      } else if (e.key === "ArrowLeft") {
         seek(-5);
-        // console.log(player.currentTime());
-        // player.currentTime(player.currentTime() - 5);
-        // } else if (e.keyCode == 39) { //right arrow
-      } else if (e.key == RightArrow) { //right arrow
+      } else if (e.key === "ArrowRight") {
         seek(5);
-        // console.log(player.currentTime());
-        // player.currentTime(player.currentTime() + 5);
-      } else if (e.key == "f") {
+      } else if (e.key == "j") {
+        seek(-10);
+      } else if (e.key == "l") {
+        seek(10);
+      } else if (/^[0-9]$/i.test(e.key)) { // key is a numerical digit
+        console.log("number key = " + e.key);
+        seekPercent(parseInt(e.key) * 10);
+      }
+
+      // Full screen
+      else if (e.key == "f") {
         toggleFullScreen();
-      } else if (e.key == " ") {
+      } else if (e.key == "Escape") {
+        player.exitFullscreen();
+      }
+
+      // Play / Pause
+      else if ((e.key == " ") || (e.key == "k")) {
         togglePause();
-      } else if (e.key == ">") { // NB: ">" is shift + "."
+      }
+
+      // Playback Rate
+      else if (e.key == ">") { // NB: ">" is shift + "."
         incrementPlaybackRate();
       } else if (e.key == "<") { // NB: "<" is shift + ","
         decrementPlaybackRate();
       }
+
     })
   </script>
 </body>
