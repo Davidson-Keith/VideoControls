@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Video-JS</title>
+  <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
+  <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.2.0/video.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.min.js"></script>
+</head>
+
+
+<body>
+  <video id="surfcam-video"
+         class="video-js vjs-default-skin vjs-big-play-centered"
+         controls="true"
+         autoplay="true"
+         muted="true"
+         preload="auto"
+         width="560"
+         height="340"
+         data-setup="{}"
+  >
+    <source src="https://www.tutorialspoint.com/videos/sample720.mp4"
+            type="video/mp4">
+  </video>
+  <script>
+    var player = videojs('surfcam-video', {});
+
+    // requires https://www.npmjs.com/package/videojs-seek-buttons
+    player.seekButtons({
+      forward: 5,
+      back: 5
+    });
+
+    function seek(seconds) {
+      console.log(player.currentTime());
+      player.currentTime(player.currentTime() + seconds);
+    }
+
+    function toggleFullScreen() {
+      console.log("player.isFullscreen() = ", player.isFullscreen());
+      if (player.isFullscreen()) {
+        player.exitFullscreen();
+      } else {
+        player.requestFullscreen();
+      }
+    }
+
+    function togglePause() {
+      console.log("player.paused() = ", player.paused());
+      if (player.paused()) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    }
+
+    function incrementPlaybackRate() {
+      const rate = player.playbackRate();
+      console.log("player.playbackRate() = " + rate);
+      let increment = 0;
+      // NB: Allow for floating point rounding error
+      if (rate > 15.9) {
+        return; // DOM doesn't support rate > 16
+      }
+      if (rate > 4.9) { // if rate  >= 5
+        increment = 1;
+      } else if (rate > 1.9) { // if rate  >= 2
+        increment = 0.5;
+      } else if (rate > 0.24) { // if rate  >= 0.25
+        increment = 0.25;
+      } else {
+        increment = 0.05;
+      }
+      console.log("increment by " + increment);
+      player.playbackRate(rate + increment);
+    }
+
+    function decrementPlaybackRate() {
+      const rate = player.playbackRate();
+      console.log("player.playbackRate() = " + rate);
+      let decrement = 0;
+      // NB: Allow for floating point rounding error
+      if (rate < 0.11) {
+        return; // DOM doesn't support rate < 0.1
+      }
+      if (rate < 0.26) { // if rate  <= 0.25
+        decrement = 0.05;
+      } else if (rate < 2.1) { // if rate  <= 2
+        decrement = 0.25;
+      } else if (rate < 5.1) { // if rate  <= 5
+        decrement = 0.5;
+      } else {
+        decrement = 1;
+      }
+      console.log("decrement by " + decrement);
+      player.playbackRate(rate - decrement);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      // if (e.keyCode == 37) {       //left arrow
+      if (e.key == LeftArrow) {       //left arrow
+        seek(-5);
+        // console.log(player.currentTime());
+        // player.currentTime(player.currentTime() - 5);
+        // } else if (e.keyCode == 39) { //right arrow
+      } else if (e.key == RightArrow) { //right arrow
+        seek(5);
+        // console.log(player.currentTime());
+        // player.currentTime(player.currentTime() + 5);
+      } else if (e.key == "f") {
+        toggleFullScreen();
+      } else if (e.key == " ") {
+        togglePause();
+      } else if (e.key == ">") { // NB: ">" is shift + "."
+        incrementPlaybackRate();
+      } else if (e.key == "<") { // NB: "<" is shift + ","
+        decrementPlaybackRate();
+      }
+    })
+  </script>
+</body>
+</html>
