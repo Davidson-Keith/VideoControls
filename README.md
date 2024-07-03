@@ -2,6 +2,8 @@
 
 In the YouTube style using Javascript, video.js, and a HTML5 video element.
 
+See https://www.mrfdev.com/youtube-keyboard-shortcuts
+
 ### Seek 
 ,               Seek backward 1 second. NB: On YT this is seek back 1 frame when paused.
 .               Seek forward 1 second. NB: On YT this is seek back 1 frame when paused.
