@@ -7,7 +7,7 @@ See https://www.mrfdev.com/youtube-keyboard-shortcuts
 
 | Keyboard Shortcut | Function                                                                 |
 |-------------------|--------------------------------------------------------------------------|
-|                   | **Seek**                                                                 |
+|                   | ***Seek***                                                               |
 | ,                 | Seek backward 1 second. NB: On YT this is seek back 1 frame when paused. |
 | .                 | Seek forward 1 second. NB: On YT this is seek back 1 frame when paused.  |
 | Left arrow	       | Seek backward 5 seconds.                                                 |
@@ -15,15 +15,15 @@ See https://www.mrfdev.com/youtube-keyboard-shortcuts
 | j                 | Seek backward 10 seconds.                                                |
 | l                 | Seek forward 10 seconds.                                                 |
 |                   | <br>                                                                     |
-|                   | **Full Screen**                                                          |
+|                   | ***Full Screen***                                                        |
 | f                 | Toggle full screen.                                                      |
 | Esc               | Exit full screen.                                                        |
 |                   | <br>                                                                     |
-|                   | **Play / Pause**                                                         |
+|                   | ***Play / Pause***                                                       |
 | Spacebar          | Toggle pause.                                                            |
 | k                 | Toggle pause.                                                            |
 |                   | <br>                                                                     |
-|                   | **Playback Rate**                                                        |
+|                   | ***Playback Rate***                                                      |
 | \>                | Increase playback rate by:                                               |
 |                   | 0.05 if rate >= 0.1 and < 0.25                                           |
 |                   | 0.25 if rate >= 0.25 and < 2                                             |
