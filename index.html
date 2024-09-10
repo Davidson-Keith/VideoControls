@@ -4,26 +4,56 @@
   <title>Test Video-JS</title>
   <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet"/>
   <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
-<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.2.0/video.min.js"></script>-->
+  <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.2.0/video.min.js"></script>-->
   <link href="https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/videojs-seek-buttons/dist/videojs-seek-buttons.min.js"></script>
+  <link href="styles.css" rel="stylesheet"/>
 </head>
-
-
 <body>
-  <video id="surfcam-video"
-         class="video-js vjs-default-skin vjs-big-play-centered"
-         controls="true"
-         autoplay="true"
-         muted="true"
-         preload="auto"
-         width="560"
-         height="340"
-         data-setup="{}"
-  >
-    <source src="https://www.tutorialspoint.com/videos/sample720.mp4"
-            type="video/mp4">
-  </video>
+  <h3>Hi there...</h3>
+  <svg class="course-item__checkbox-svg" viewBox="0 0 20 20">
+    <circle
+      class="course-item__checkbox-svg-outline"
+      cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2" fill="none"
+      stroke-linecap="round" stroke-dasharray="4 4" stroke-opacity="0.5"
+    />
+    <path
+      class="course-item__checkbox-svg-checkmark"
+      d="M6 10.5L8.5 13L14 8" stroke="currentColor" stroke-width="2" fill="none"
+      stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100"
+    />
+  </svg>
+
+  <!--  Our video container
+    position: relative;
+    display: inline-block;
+    width: 600px;
+    height: 400px;
+    border-style: solid;
+    border-color: red;
+   -->
+  <div id="video-container">
+
+    <!--    Our video
+      height: 100% !important;
+      margin: 0 auto;
+    -->
+    <video id="surfcam-video"
+           class="video-js vjs-default-skin vjs-big-play-centered"
+           autoplay="true"
+           width="560"
+           height="340"
+           controls="true"
+           muted="true"
+           preload="auto"
+           data-setup="{}"
+    >
+      <source src="https://www.tutorialspoint.com/videos/sample720.mp4"
+              type="video/mp4">
+    </video>
+    <!--    Our test overlay box, green, 200px x 70px-->
+    <div id="video-overlay">This is the video-overlay</div>
+  </div>
   <script>
     var player = videojs('surfcam-video', {});
 
@@ -32,6 +62,14 @@
       forward: 5,
       back: 5
     });
+
+    // YT uses Roboto font
+    // e.g. for 1.75x "icon"
+
+
+    // ----------------------------
+    // ---  Keyboard Shortcuts  ---
+    // ----------------------------
 
     function seek(seconds) {
       console.log("player.currentTime() = " + player.currentTime());
@@ -43,6 +81,16 @@
       console.log("player.duration() * percent / 100 = " + player.duration() * percent / 100);
       player.currentTime(player.duration() * percent / 100);
     }
+
+    // document.getElementById("surfcam-video").addEventListener('fullscreenchange', toggle_fullscreen)
+    // function toggle_fullscreen() {
+    //   let video_div = document.getElementById("video-div");
+    //   if (document.fullscreenElement === null) {
+    //     video_div.requestFullscreen();
+    //   } else {
+    //     // document.exitFullscreen();
+    //   }
+    // }
 
     function toggleFullScreen() {
       console.log("player.isFullscreen() = ", player.isFullscreen());
@@ -129,7 +177,9 @@
       else if (e.key == "f") {
         toggleFullScreen();
       } else if (e.key == "Escape") {
-        player.exitFullscreen();
+        if (player.isFullscreen()) {
+          player.exitFullscreen();
+        }
       }
 
       // Play / Pause
@@ -143,7 +193,102 @@
       } else if (e.key == "<") { // NB: "<" is shift + ","
         decrementPlaybackRate();
       }
-    })
+    });
+
+
+    // --------------------------
+    // ---      Tooltips      ---
+    // --------------------------
+
+    // Function to create and show tooltip
+    function showTooltip(text, x, y) {
+      const tooltip = document.createElement('div');
+      tooltip.classList.add('tooltip');
+      tooltip.textContent = text;
+      tooltip.style.left = `${x}px`;
+      tooltip.style.top = `${y}px`;
+      document.getElementById("surfcam-video").appendChild(tooltip);
+      // document.body.appendChild(tooltip);
+      console.log("tooltip = " + tooltip);
+      console.log("tooltip.classList = " + tooltip.classList);
+      console.log("tooltip.classList = " + tooltip.textContent);
+      console.log("tooltip.style.left = " + tooltip.style.left);
+      console.log("tooltip.style.top = " + tooltip.style.top);
+      console.log("tooltip.style = " + tooltip.style);
+
+      // Hide tooltip after tooltipTimeout in mS.
+      const tooltipTimeout = 15000;
+      setTimeout(() => {
+        tooltip.remove();
+      }, tooltipTimeout);
+    }
+
+    document.addEventListener("keydown",
+      (e) => {
+        console.log("e.key = " + e.key);
+
+        // Define tooltip text based on the key pressed
+        let tooltipText = '';
+        switch (e.key) {
+          case ",":
+            tooltipText = 'Seek -1 second';
+            break;
+          case ".":
+            tooltipText = 'Seek +1 second';
+            break;
+          case "ArrowLeft":
+            tooltipText = 'Seek -5 seconds';
+            break;
+          case "ArrowRight":
+            tooltipText = 'Seek +5 seconds';
+            break;
+          case "j":
+            tooltipText = 'Seek -10 seconds';
+            break;
+          case "l":
+            tooltipText = 'Seek +10 seconds';
+            break;
+          case "f":
+            tooltipText = 'Toggle Full Screen';
+            break;
+          case "Escape":
+            tooltipText = 'Exit Full Screen';
+            break;
+          case " ":
+          case "k":
+            tooltipText = 'Toggle Play / Pause';
+            break;
+          case ">":
+            tooltipText = 'Increase Playback Rate';
+            break;
+          case "<":
+            tooltipText = 'Decrease Playback Rate';
+            break;
+          default:
+            return; // Do nothing if key doesn't have a tooltip
+        } // end switch
+
+        // Show tooltip at the center of the screen
+        const surfcam = document.getElementById("surfcam-video");
+        const videoContainer = document.getElementById("video-container");
+        const x = surfcam.offsetWidth / 2;
+        const y = surfcam.offsetHeight / 2;
+
+        // const x = window.innerWidth / 2;
+        // const y = window.innerHeight / 2;
+        console.log("tooltip text = " + tooltipText);
+        console.log("surfcam.offsetLeft = " + surfcam.offsetLeft); // 20
+        console.log("surfcam.offsetTop = " + surfcam.offsetTop); // 0
+        console.log("surfcam.offsetWidth = " + surfcam.offsetWidth); // 560
+        console.log("surfcam.offsetHeight = " + surfcam.offsetHeight); // 340
+        console.log("tooltip x (surfcam.offsetWidth / 2) = " + x);
+        console.log("tooltip y (surfcam.offsetHeight / 2) = " + y);
+        console.log("videoContainer.offsetLeft = " + videoContainer.offsetLeft);  // 8 = dist container left to body left (parent)
+        console.log("videoContainer.offsetTop = " + videoContainer.offsetTop); // 1027 = dist container top to body top (parent)
+        console.log("videoContainer.offsetWidth = " + videoContainer.offsetWidth); // 600
+        console.log("videoContainer.offsetHeight = " + videoContainer.offsetHeight); // 340
+        showTooltip(tooltipText, x, y);
+      });
   </script>
 </body>
 </html>
